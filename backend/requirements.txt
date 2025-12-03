@@ -1,0 +1,6 @@
+Django==5.2.8
+psycopg2-binary==2.9.10
+python-decouple==3.8
+django-cors-headers==4.6.0
+pytz==2024.2
+watchdog==5.0.3

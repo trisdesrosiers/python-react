@@ -1,0 +1,569 @@
+:root {
+    --primary-color: #5E5BFF;
+    --secondary-color: #3d0066;
+    --accent-color: #4845ff;
+    --accent-hover: #3a38cc;
+    --text-color: #333;
+    --card-bg: rgba(255, 255, 255, 1);
+    --card-hover-bg: #f7f7ff;
+    --card-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    --gradient-start: #f0f0ff;
+    --gradient-end: #e6e9ff;
+}
+
+.homepage-container {
+    height: 100vh;
+    width: 100%;
+    background: transparent;
+    color: var(--text-color);
+    overflow-y: auto;
+    overflow-x: hidden;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+
+.hero-section {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+    padding: 2rem 0;
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(135deg, #f8f9ff 0%, #ffffff 50%, #f0f2ff 100%);
+}
+
+.hero-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(45deg, rgba(255,255,255,0.1) 25%, transparent 25%),
+                linear-gradient(-45deg, rgba(255,255,255,0.1) 25%, transparent 25%),
+                linear-gradient(45deg, transparent 75%, rgba(255,255,255,0.1) 75%),
+                linear-gradient(-45deg, transparent 75%, rgba(255,255,255,0.1) 75%);
+    background-size: 20px 20px;
+    background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
+    opacity: 0.1;
+}
+
+.wave-animation {
+    position: relative;
+    width: 100%;
+    height: 300px;
+    z-index: 1;
+    overflow: hidden;
+    margin-top: 2rem;
+}
+
+.wave-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.wave-line {
+    position: absolute;
+    width: 3px;
+    height: 200px;
+    background: linear-gradient(
+        45deg,
+        rgba(220, 20, 60, 0.9) 0%,
+        rgba(148, 0, 211, 0.95) 20%,
+        rgba(75, 0, 130, 1) 40%,
+        rgba(0, 0, 0, 1) 50%,
+        rgba(75, 0, 130, 1) 60%,
+        rgba(148, 0, 211, 0.95) 80%,
+        rgba(220, 20, 60, 0.9) 100%
+    );
+    border-radius: 2px;
+    transform-origin: center;
+    animation: smoothWaveMotion 6s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    animation-delay: calc(var(--i) * 0.02s);
+    left: calc(var(--i) * 0.5%);
+    box-shadow: 0 0 8px rgba(148, 0, 211, 0.2);
+}
+
+@keyframes smoothWaveMotion {
+    0% {
+        transform: translateY(0) rotate(0deg) scaleY(0.4);
+        opacity: 0.4;
+    }
+    16.66% {
+        transform: translateY(-20px) rotate(2deg) scaleY(0.7);
+        opacity: 0.6;
+    }
+    33.33% {
+        transform: translateY(-50px) rotate(-3deg) scaleY(1.1);
+        opacity: 0.9;
+    }
+    50% {
+        transform: translateY(-80px) rotate(1deg) scaleY(1.4);
+        opacity: 1;
+    }
+    66.66% {
+        transform: translateY(-50px) rotate(-2deg) scaleY(1.1);
+        opacity: 0.9;
+    }
+    83.33% {
+        transform: translateY(-20px) rotate(1deg) scaleY(0.7);
+        opacity: 0.6;
+    }
+    100% {
+        transform: translateY(0) rotate(0deg) scaleY(0.4);
+        opacity: 0.4;
+    }
+}
+
+.hero-content {
+    max-width: 800px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 2;
+    padding: 0 2rem;
+}
+
+.hero-text-content {
+    text-align: center;
+    margin-bottom: 0;
+}
+
+.hero-logo {
+    width: 200px;
+    height: auto;
+    margin-bottom: 1rem;
+    animation: floatAnimation 3s ease-in-out infinite;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.hero-logo:hover {
+    animation: spinAndGrow 0.6s ease-in-out forwards;
+    filter: drop-shadow(0 0 20px rgba(94, 91, 255, 0.5));
+}
+
+.hero-title {
+    color: #8B5CF6;
+    font-size: 3.5rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    text-shadow: none;
+    background: linear-gradient(135deg, #8B5CF6 0%, #A855F7 50%, #9333EA 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.hero-subtitle {
+    color: #6B7280;
+    font-size: 1.1rem;
+    margin-bottom: 0;
+    line-height: 1.6;
+    opacity: 0.9;
+    font-weight: 400;
+}
+
+.demo-credentials-box {
+    margin-top: 2rem;
+    padding: 1rem 1.5rem;
+    background: linear-gradient(135deg, rgba(139, 92, 246, 0.08) 0%, rgba(168, 85, 247, 0.12) 100%);
+    border: 1px solid rgba(139, 92, 246, 0.25);
+    border-radius: 12px;
+    display: inline-block;
+    backdrop-filter: blur(8px);
+}
+
+.demo-credentials-content {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.demo-credential {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.credential-key {
+    color: #6B7280;
+    font-size: 0.85rem;
+    font-weight: 500;
+    min-width: 70px;
+    text-align: left;
+}
+
+.credential-value {
+    background: rgba(139, 92, 246, 0.12);
+    color: #7C3AED;
+    padding: 0.25rem 0.6rem;
+    border-radius: 6px;
+    font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+    font-size: 0.9rem;
+    font-weight: 500;
+    border: 1px solid rgba(139, 92, 246, 0.15);
+    min-width: 145px;
+    text-align: left;
+}
+
+.copy-icon {
+    color: #9CA3AF;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+}
+
+.copy-icon:hover {
+    color: #7C3AED;
+    transform: scale(1.1);
+}
+
+.copy-icon.copied {
+    color: #10B981;
+}
+
+.hero-buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    margin-top: 1rem;
+    margin-bottom: 2rem;
+}
+
+.hero-buttons .ant-btn {
+    height: 48px;
+    padding: 0 2rem;
+    font-size: 1.1rem;
+    border-radius: 24px;
+}
+
+.hero-buttons .ant-btn-primary {
+    background: var(--accent-color);
+    border-color: var(--accent-color);
+    transition: all 0.3s ease;
+}
+
+.hero-buttons .ant-btn-primary:hover {
+    background: var(--accent-hover);
+    border-color: var(--accent-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(72, 69, 255, 0.2);
+}
+
+/* Add animation keyframes */
+@keyframes floatAnimation {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+    100% { transform: translateY(0px); }
+}
+
+.stats-section {
+    padding: 3rem 2rem;
+    background: transparent;
+    position: relative;
+}
+
+.stat-card {
+    text-align: center;
+    padding: 2rem;
+    border-radius: 12px;
+    background: var(--card-bg);
+    box-shadow: var(--card-shadow);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+}
+
+.stat-card:hover {
+    transform: translateY(-5px);
+    background: var(--card-hover-bg);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+}
+
+.stat-icon {
+    font-size: 2.5rem;
+    color: var(--accent-color);
+    margin-bottom: 1rem;
+}
+
+.features-section {
+    padding: 3rem 2rem;
+    background: transparent;
+    position: relative;
+}
+
+.feature-card {
+    padding: 2rem;
+    text-align: center;
+    border-radius: 12px;
+    background: var(--card-bg);
+    box-shadow: var(--card-shadow);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+    opacity: 0;
+    transform: translateY(20px);
+}
+
+.feature-card.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.feature-card:hover {
+    transform: translateY(-5px);
+    background: var(--card-hover-bg);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+}
+
+.cta-section {
+    text-align: center;
+    padding: 3rem 2rem;
+    background: transparent;
+    position: relative;
+}
+
+.section-title {
+    color: var(--text-color);
+    margin-bottom: 2rem;
+    text-align: center;
+    font-size: 2rem;
+    font-weight: 600;
+}
+
+.feature-card h3 {
+    color: var(--text-color);
+    margin: 1rem 0;
+}
+
+.feature-card p {
+    color: var(--text-color);
+    opacity: 0.85;
+}
+
+.ant-statistic-title {
+    color: var(--text-color) !important;
+    opacity: 0.85;
+}
+
+.ant-statistic-content {
+    color: var(--secondary-color) !important;
+}
+
+@media (max-width: 768px) {
+    .hero-title {
+        font-size: 2.5rem;
+    }
+    
+    .hero-subtitle {
+        font-size: 1rem;
+    }
+    
+    .hero-buttons {
+        flex-direction: column;
+    }
+    
+    .wave-line {
+        width: 2px;
+        height: 150px;
+        left: calc(var(--i) * 0.5%);
+    }
+    
+    .wave-animation {
+        height: 250px;
+    }
+    
+    .hero-content {
+        gap: 1.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .hero-title {
+        font-size: 2rem;
+    }
+    
+    .hero-subtitle {
+        font-size: 0.9rem;
+    }
+    
+    .wave-line {
+        width: 1px;
+        height: 100px;
+        left: calc(var(--i) * 0.5%);
+    }
+    
+    .wave-animation {
+        height: 200px;
+    }
+    
+    .hero-content {
+        gap: 1rem;
+    }
+}
+
+/* Navigation Styles */
+.nav-button {
+    background-color: var(--primary);
+    color: white;
+    padding: 10px 24px;
+    border-radius: 6px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    text-decoration: none;
+}
+
+.nav-button:hover {
+    background-color: #4845ff;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(94, 91, 255, 0.2);
+}
+
+.nav-link {
+    color: #333;
+    text-decoration: none;
+    margin-right: 24px;
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+.nav-link:hover {
+    color: var(--primary);
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slide {
+    from {
+        transform: translateX(0);
+    }
+    to {
+        transform: translateX(100%);
+    }
+}
+
+.security-section {
+    padding: 3rem 2rem;
+    background: transparent;
+    position: relative;
+}
+
+.security-card {
+    height: 100%;
+    padding: 2rem;
+    text-align: center;
+    border-radius: 12px;
+    background: var(--card-bg);
+    box-shadow: var(--card-shadow);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+}
+
+.security-card:hover {
+    transform: translateY(-5px);
+    background: var(--card-hover-bg);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+}
+
+.security-icon {
+    font-size: 2.5rem;
+    color: var(--accent-color);
+    margin: 1.5rem 0;
+}
+
+.security-card h3 {
+    color: var(--secondary-color);
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+.security-card p {
+    color: var(--text-color);
+    font-size: 1rem;
+    line-height: 1.6;
+    margin: 0;
+    opacity: 0.85;
+}
+
+/* Add any necessary imports at the top of the file */
+.ant-card {
+    background: var(--card-bg) !important;
+    border: 1px solid rgba(0, 0, 0, 0.05) !important;
+    box-shadow: var(--card-shadow) !important;
+    transition: all 0.3s ease !important;
+}
+
+.ant-card:hover {
+    border: 1px solid rgba(0, 0, 0, 0.05) !important;
+    background: var(--card-hover-bg) !important;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08) !important;
+    transform: translateY(-5px);
+}
+
+/* Remove any default Ant Design hover styles */
+.ant-card-hoverable:hover {
+    border-color: rgba(0, 0, 0, 0.05) !important;
+}
+
+/* Make sure the card body maintains the same style */
+.ant-card-body {
+    background: transparent !important;
+    border-radius: 12px;
+}
+
+/* Update specific card styles */
+.stat-card, .feature-card, .security-card {
+    background: var(--card-bg) !important;
+    border: 1px solid rgba(0, 0, 0, 0.05) !important;
+    box-shadow: var(--card-shadow) !important;
+}
+
+.stat-card:hover, .feature-card:hover, .security-card:hover {
+    background: var(--card-hover-bg) !important;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08) !important;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .security-section {
+        padding: 4rem 1rem;
+    }
+    
+    .security-card {
+        margin-bottom: 1rem;
+    }
+}
+/* Add spacing between sections */
+.stats-section + .features-section,
+.features-section + .security-section,
+.security-section + .cta-section {
+    padding-top: 1rem;
+}
+
+/* Add the new keyframes for the surprise animation */
+@keyframes spinAndGrow {
+    0% {
+        transform: scale(1) rotate(0deg);
+    }
+    50% {
+        transform: scale(1.2) rotate(180deg);
+    }
+    100% {
+        transform: scale(1) rotate(360deg);
+    }
+}

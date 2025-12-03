@@ -1,0 +1,80 @@
+services:
+  nginx:
+    restart: unless-stopped
+    image: nginx:alpine
+    ports:
+      - ${EXPOSED_NGINX_PORT}:3001
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./frontend/public:/usr/share/nginx/html:ro
+    depends_on:
+      - backend
+      - frontend
+    networks:
+      - project1-network
+
+  backend:
+    restart: unless-stopped
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    user: "${UID:-1000}:${GID:-1000}"
+    volumes:
+      - ./backend:/app/backend
+      - ${PROJECT1_PACKAGE_PATH}/psql:/app/psql
+      - ./.env:/app/.env
+    depends_on:
+      postgres:
+        condition: service_healthy
+    command: sh -c "python manage.py makemigrations && python manage.py migrate && python manage.py runserver 0.0.0.0:3000"
+    networks:
+      - project1-network
+
+  frontend:
+    restart: unless-stopped
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    user: "${UID:-1000}:${GID:-1000}"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    environment:
+      - REACT_APP_API_URL=http://backend:3000
+      - NODE_ENV=${NODE_ENV}
+      - WDS_SOCKET_PORT=0
+      - CHOKIDAR_USEPOLLING=false
+      - FAST_REFRESH=false
+      - PORT=3002
+      - REACT_APP_DISABLE_HOT_RELOAD=true
+      - DANGEROUSLY_DISABLE_HOST_CHECK=true
+    depends_on:
+      - backend
+    command: npm run dev
+    networks:
+      - project1-network
+
+  postgres:
+    restart: unless-stopped
+    image: postgres:15-alpine
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./psql/scripts:/docker-entrypoint-initdb.d
+    environment:
+      - POSTGRES_USER=${PSQL_DB_USER}
+      - POSTGRES_PASSWORD=${PSQL_DB_PASSWORD}
+      - POSTGRES_DB=project1
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${PSQL_DB_USER}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - project1-network
+
+volumes:
+  postgres_data:
+
+networks:
+  project1-network:
+    driver: bridge

@@ -1,0 +1,13 @@
+**/__pycache__*
+**/__init__.py*
+*.pyc
+*.env
+*.txt
+*.log
+**/node_modules*
+**/build*
+*.sqlite3
+package-lock.json
+**/attachments*
+!reset_db.txt
+!requirements.txt
