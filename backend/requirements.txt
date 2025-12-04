@@ -4,3 +4,5 @@ python-decouple==3.8
 django-cors-headers==4.6.0
 pytz==2024.2
 watchdog==5.0.3
+channels==4.0.0
+daphne==4.1.0

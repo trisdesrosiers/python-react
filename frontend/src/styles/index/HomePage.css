@@ -229,6 +229,102 @@
     color: #10B981;
 }
 
+.firstname-edit-box {
+    margin-top: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+}
+
+.firstname-input {
+    padding: 0.5rem 1rem;
+    font-size: 0.95rem;
+    border: 1px solid rgba(139, 92, 246, 0.3);
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.9);
+    color: #333;
+    width: 180px;
+    outline: none;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.firstname-input:focus {
+    border-color: #8B5CF6;
+    box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.15);
+}
+
+.firstname-save-btn {
+    padding: 0.5rem 1.25rem;
+    font-size: 0.95rem;
+    font-weight: 500;
+    background: linear-gradient(135deg, #8B5CF6 0%, #7C3AED 100%);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.firstname-save-btn:hover:not(:disabled) {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
+}
+
+.firstname-save-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.save-message {
+    font-size: 0.85rem;
+    color: #10B981;
+    font-weight: 500;
+}
+
+.realtime-status {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-top: 1rem;
+    margin-bottom: 0.5rem;
+}
+
+.status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    transition: background-color 0.3s ease;
+}
+
+.status-dot.connected {
+    background-color: #10B981;
+    box-shadow: 0 0 8px rgba(16, 185, 129, 0.5);
+    animation: pulse 2s infinite;
+}
+
+.status-dot.disconnected {
+    background-color: #F59E0B;
+    animation: blink 1s infinite;
+}
+
+.status-text {
+    font-size: 0.8rem;
+    color: #6B7280;
+    font-weight: 400;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.6; }
+}
+
+@keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+}
+
 .hero-buttons {
     display: flex;
     gap: 1rem;

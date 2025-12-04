@@ -16,6 +16,7 @@ DEBUG = True
 ALLOWED_HOSTS = ['*']
 
 INSTALLED_APPS = [
+    'daphne',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -23,6 +24,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'corsheaders',
+    'channels',
     'api',
 ]
 
@@ -56,6 +58,14 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'project1.wsgi.application'
+ASGI_APPLICATION = 'project1.asgi.application'
+
+# Channels configuration (using in-memory for single-server, no Redis needed)
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels.layers.InMemoryChannelLayer"
+    }
+}
 
 DATABASES = {
     'default': {

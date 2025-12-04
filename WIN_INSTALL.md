@@ -53,7 +53,7 @@ wsl --update
 ### 6. Start the Application
 
 ```bash
-docker compose up -d
+docker compose -f docker-compose.yml -f docker-compose.dev.yml up -d
 ```
 
 ![Docker Desktop Settings for Windows](screenshots/win_install6.png)
