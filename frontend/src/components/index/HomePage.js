@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import '../../styles/index/HomePage.css';
 import Footer from '../layout/Footer';
 import { useAuth } from '../../contexts/AuthContext';
+import { useTableChanges } from '../../hooks/useWebSocket';
 
 const CopyIcon = ({ onClick, copied }) => (
     <svg 
@@ -28,8 +29,45 @@ const CopyIcon = ({ onClick, copied }) => (
 );
 
 const HomePage = () => {
-    const { isLoggedIn, user, loading } = useAuth();
+    const { isLoggedIn, user, loading, updateFirstname } = useAuth();
     const [copiedField, setCopiedField] = useState(null);
+    const [firstname, setFirstname] = useState('');
+    const [saving, setSaving] = useState(false);
+    const [saveMessage, setSaveMessage] = useState('');
+    const [realtimeFirstname, setRealtimeFirstname] = useState(null);
+
+    // Listen for real-time profile changes
+    const handleProfileChange = useCallback((change) => {
+        if (change.operation === 'UPDATE' && change.data?.email === user?.email) {
+            setRealtimeFirstname(change.data.firstname);
+        }
+    }, [user?.email]);
+
+    const { isConnected } = useTableChanges('profiles', handleProfileChange, isLoggedIn);
+
+    React.useEffect(() => {
+        if (user?.firstname) {
+            setFirstname(user.firstname);
+        }
+    }, [user?.firstname]);
+
+    // Use realtime firstname if available, otherwise use user firstname
+    const displayFirstname = realtimeFirstname || user?.firstname;
+
+    const handleSaveFirstname = async () => {
+        if (!firstname.trim()) return;
+        setSaving(true);
+        setSaveMessage('');
+        try {
+            await updateFirstname(firstname.trim());
+            setSaveMessage('Saved!');
+            setTimeout(() => setSaveMessage(''), 2000);
+        } catch (error) {
+            setSaveMessage('Error saving');
+        } finally {
+            setSaving(false);
+        }
+    };
 
     const handleCopy = (text, field) => {
         const textarea = document.createElement('textarea');
@@ -67,11 +105,34 @@ const HomePage = () => {
                         {isLoggedIn ? (
                             <>
                                 <h1 className="hero-title">
-                                    Welcome, {user?.firstname} {user?.lastname}!
+                                    Welcome, {displayFirstname} {user?.lastname}!
                                 </h1>
                                 <p className="hero-subtitle">
                                     You are successfully logged in to Project1
                                 </p>
+                                <div className="realtime-status">
+                                    <span className={`status-dot ${isConnected ? 'connected' : 'disconnected'}`}></span>
+                                    <span className="status-text">
+                                        {isConnected ? 'Real-time updates active' : 'Connecting...'}
+                                    </span>
+                                </div>
+                                <div className="firstname-edit-box">
+                                    <input
+                                        type="text"
+                                        className="firstname-input"
+                                        value={firstname}
+                                        onChange={(e) => setFirstname(e.target.value)}
+                                        placeholder="First name"
+                                    />
+                                    <button 
+                                        className="firstname-save-btn"
+                                        onClick={handleSaveFirstname}
+                                        disabled={saving || !firstname.trim()}
+                                    >
+                                        {saving ? 'Saving...' : 'Save'}
+                                    </button>
+                                    {saveMessage && <span className="save-message">{saveMessage}</span>}
+                                </div>
                             </>
                         ) : (
                             <>

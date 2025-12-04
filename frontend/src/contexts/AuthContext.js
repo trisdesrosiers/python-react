@@ -67,8 +67,17 @@ export const AuthProvider = ({ children }) => {
         return response.data;
     };
 
+    const updateFirstname = async (firstname) => {
+        const response = await axios.post('/api/profile/update/', {
+            firstname
+        }, {
+            withCredentials: true
+        });
+        return response.data;
+    };
+
     return (
-        <AuthContext.Provider value={{ user, isLoggedIn, loading, login, logout, register }}>
+        <AuthContext.Provider value={{ user, isLoggedIn, loading, login, logout, register, updateFirstname }}>
             {children}
         </AuthContext.Provider>
     );

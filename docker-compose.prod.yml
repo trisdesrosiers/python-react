@@ -1,0 +1,26 @@
+# Production overrides
+# Usage: docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d
+
+services:
+  nginx:
+    volumes:
+      - ./nginx.prod.conf:/etc/nginx/conf.d/default.conf:ro
+      - frontend_build:/usr/share/nginx/html:ro
+
+  backend:
+    volumes:
+      - ./.env:/app/.env:ro
+    environment:
+      - DJANGO_DEBUG=false
+    command: sh -c "python manage.py migrate && daphne -b 0.0.0.0 -p 3000 project1.asgi:application"
+
+  frontend:
+    volumes:
+      - frontend_build:/app/build
+    environment:
+      - NODE_ENV=production
+    command: sh -c "npm run build && tail -f /dev/null"
+
+volumes:
+  frontend_build:
+

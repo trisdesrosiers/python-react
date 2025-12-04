@@ -22,7 +22,9 @@ Skip the boilerplate. Start building. A production-ready full-stack template wit
 - [Clean Installation](#clean-installation)
   - [Windows Installation](WIN_INSTALL.md)
   - [Linux](#linux)
+- [Docker Compose Structure](#docker-compose-structure)
 - [Docker Commands](#docker-commands)
+- [Setup Improvements](SETUP_IMPROVEMENTS.md)
 - [Credits](#credits)
 
 ## Quick Start
@@ -38,9 +40,9 @@ cp .env_ex .env # Linux
 copy .env_ex .env # Windows
 ```
 
-2. **Build and run**
+2. **Build and run (development)**
 ```bash
-docker compose up -d
+docker compose -f docker-compose.yml -f docker-compose.dev.yml up -d
 ```
 
 3. **Access the application**
@@ -78,8 +80,8 @@ For Windows installation with Docker Desktop and WSL, see the **[Windows Install
 ```bash
 git clone git@github.com:trisdesrosiers/python-react.git
 
-# Build and run
-docker compose up -d
+# Build and run (development)
+docker compose -f docker-compose.yml -f docker-compose.dev.yml up -d
 ```
 
 ### Verify Installation
@@ -111,8 +113,11 @@ After successful login, you're ready to customize the project template to your n
 │   ├── requests/        # DB request handlers
 │   ├── scripts/         # SQL initialization
 │   └── psqlManager.py   # DB request orchestration
-├── nginx.conf           # Nginx configuration
-└── docker-compose.yml   # Container orchestration
+├── nginx.conf           # Nginx configuration (development)
+├── nginx.prod.conf      # Nginx configuration (production)
+├── docker-compose.yml   # Base container orchestration
+├── docker-compose.dev.yml   # Development overrides
+└── docker-compose.prod.yml  # Production overrides
 ```
 
 
@@ -134,7 +139,7 @@ After successful login, you're ready to customize the project template to your n
 - Port: 3002 (internal)
 
 **Database (PostgreSQL 15)**
-- Auto-initialized with schema from `psql/scripts/init.sql`
+- Auto-initialized with schema from `psql/scripts/01_init.sql`
 - Includes roles, profiles, and registrations tables
 - Demo user: `demo@example.com` / `password123`
 
@@ -158,7 +163,7 @@ Access the backend container and run test scripts:
 
 ```bash
 # Enter backend container
-docker exec -it python-react-backend-1 bash
+docker exec -it project1-backend bash
 
 # Navigate to psql directory
 cd /app/psql
@@ -201,28 +206,59 @@ Demo User
 - Axios 1.7.9
 
 
+## Docker Compose Structure
+
+The project uses a 3-file Docker Compose pattern for environment separation:
+
+| File | Purpose |
+|------|---------|
+| `docker-compose.yml` | **Base config** — shared settings (container names, networks, health checks, resource limits) |
+| `docker-compose.dev.yml` | **Development overrides** — source code volumes, hot reload, debug settings |
+| `docker-compose.prod.yml` | **Production overrides** — built assets, no source mounts, optimized settings |
+
+```bash
+# Development - mounts source code, enables hot reload
+docker compose -f docker-compose.yml -f docker-compose.dev.yml up -d
+
+# Production - uses built assets, no source volumes  
+docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d
+```
+
+| Setting | Development | Production |
+|---------|-------------|------------|
+| Source code | Mounted as volumes | Baked into image |
+| Frontend | Dev server (hot reload) | Static build served by nginx |
+| node_modules | Named volume | In image |
+
+
 ## Useful Docker Commands
 
 ```bash
-# Start services
-docker compose up -d
+# Start services (development)
+docker compose -f docker-compose.yml -f docker-compose.dev.yml up -d
+
+# Start services (production)
+docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d
 
 # Stop services
 docker compose down
 
 # Rebuild services after changes
-docker compose build
+docker compose -f docker-compose.yml -f docker-compose.dev.yml build
 
-# Tail services logs
-docker compose logs -f python-react-backend-1 bash
-docker compose logs -f python-react-frontend-1 bash
+# View logs
+docker compose logs -f backend
+docker compose logs -f frontend
 
-# Access services shell
-docker compose exec -it python-react-backend-1 bash
+# Access backend shell
+docker exec -it project1-backend bash
 
 # Access database
-docker compose exec -it python-react-postgres-1 bash
+docker exec -it project1-postgres bash
 psql -U postgres -d project1
+
+# Generate migrations (run from host, not in container startup)
+docker exec -it project1-backend python manage.py makemigrations
 ```
 
 ## Credits
